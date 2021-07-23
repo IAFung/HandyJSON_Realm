@@ -8,9 +8,12 @@
 import Foundation
 import RealmSwift
 import HandyJSON
-typealias Base = RealmSwift.Object & HandyJSON
+typealias Base = RealmSwift.Object & HandyJSON & CascadingDeletable
+
 
 class Province: Base {
+    static var propertiesToCascadeDelete: [String] = ["cityList"]
+    
     @objc dynamic var name: String? = nil
     @objc dynamic var id: String? = nil
     
@@ -41,7 +44,9 @@ class Province: Base {
 }
 
 class City: Base {
+    static var propertiesToCascadeDelete: [String] = ["schoolList", "distinguish"]
     @objc dynamic var name: String? = nil
+    @objc dynamic var distinguish: Distinguish?
     var schoolList = List<School>()
     func mapping(mapper: HelpingMapper) {
         mapper <<<
@@ -51,6 +56,7 @@ class City: Base {
 }
 
 class School: Base {
+    static var propertiesToCascadeDelete: [String] = ["classList"]
     @objc dynamic var name: String? = nil
     var classList = List<Class>()
     func mapping(mapper: HelpingMapper) {
@@ -61,6 +67,8 @@ class School: Base {
 }
 
 class Class: Base {
+    static var propertiesToCascadeDelete: [String] = ["studentList"]
+
     @objc dynamic var name: String? = nil
     var studentList = List<Student>()
     func mapping(mapper: HelpingMapper) {
@@ -72,6 +80,15 @@ class Class: Base {
 
 class Student: Base {
     @objc dynamic var name: String? = nil
+    @objc dynamic var ID: String? = nil
+//    override class func primaryKey() -> String? {
+//        return "ID"
+//    }
     required override init() {}
 }
 
+
+class Distinguish: Base {
+    @objc dynamic var name: String? = nil
+    required override init() {}
+}
