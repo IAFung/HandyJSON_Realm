@@ -1,0 +1,1 @@
+# HandyJSON_Realm
